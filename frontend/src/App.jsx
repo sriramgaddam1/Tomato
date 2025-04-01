@@ -10,6 +10,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Verify from "./pages/Verify/Verify";
 import MyOrders from "./pages/MyOrders/MyOrders";
+import About from "./components/About/About";
+import PrivacyPolicy from "./components/Privacy/Privacy";
+import HelpPage from "./components/Help/Help";
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -25,6 +28,10 @@ const App = () => {
           <Route path="/order" element={<PlaceOrder />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/myorders" element={<MyOrders />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/privacy"element={<PrivacyPolicy />} />
+          <Route path="/help" element={<HelpPage/>}/>
+
         </Routes>
       </div>
       <Footer />
