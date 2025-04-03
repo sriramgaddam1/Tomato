@@ -43,6 +43,7 @@ const About = () => {
         <a href="/" className="cta-button">View Menu</a>
       </section> */}
     </div>
+    
   );
 };
 

@@ -26,7 +26,11 @@ const MyOrders = () => {
   }, [token]);
   return (
     <div className="my-orders">
-      <h2>Orders</h2>
+      <video autoPlay loop muted className="header-video">
+        <source src="orders.webm" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <h2>Your Orders</h2>
       <div className="container">
         {data.map((order, index) => {
           return (
@@ -47,7 +51,7 @@ const MyOrders = () => {
                 <span>&#x25cf;</span>
                 <b> {order.status}</b>
               </p>
-              <button onClick={fetchOrders}>Track Order</button>
+              <button onClick={fetchOrders}>⬅️Order Status</button>
             </div>
           );
         })}
