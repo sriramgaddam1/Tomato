@@ -1,11 +1,12 @@
-.login-popup{
-    position: absolute;
-    z-index: 1;
+.login-popup {
+    position: fixed; /* Ensures it covers the entire viewport */
+    z-index: 10; /* Higher than the header-contents */
     width: 100%;
     height: 100%;
-    background-color: #00000090;
-    display: grid; 
+    background-color: rgba(0, 0, 0, 0.5);
+    display: grid;
 }
+
 .login-popup-container{
     place-self: center;
     width:max(23vw,330px);
@@ -18,6 +19,7 @@
     border-radius: 8px;
     font-size: 14px;
     animation: fadeIn 0.5s;
+    position: absolute;
 
 }
 .login-popup-title{

@@ -7,15 +7,33 @@ export const StoreContext = createContext(null);
 const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [food_list, setFoodList] = useState([]);
-  const [loading, setLoading] = useState(true); // Track loading state
+  const [loading, setLoading] = useState(true);
   const url = "http://localhost:4000";
   const [token, setToken] = useState(localStorage.getItem("token") || "");
 
+  // ✅ Load cart from localStorage if no token (user not logged in)
+  useEffect(() => {
+    if (!token) {
+      const savedCart = localStorage.getItem("cartItems");
+      if (savedCart) {
+        setCartItems(JSON.parse(savedCart)); // Restore cart from localStorage
+      }
+    }
+  }, []);
+
+  // ✅ Save cart to localStorage when cart changes (only for guest users)
+  useEffect(() => {
+    if (!token) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+  }, [cartItems]);
+
   const addToCart = async (itemId) => {
-    setCartItems((prev) => ({
-      ...prev,
-      [itemId]: (prev[itemId] || 0) + 1,
-    }));
+    setCartItems((prev) => {
+      const newCart = { ...prev, [itemId]: (prev[itemId] || 0) + 1 };
+      if (!token) localStorage.setItem("cartItems", JSON.stringify(newCart)); // Save for guests
+      return newCart;
+    });
 
     if (token) {
       try {
@@ -43,6 +61,7 @@ const StoreContextProvider = (props) => {
       } else {
         delete newCart[itemId]; // Remove item if count is 0
       }
+      if (!token) localStorage.setItem("cartItems", JSON.stringify(newCart)); // Save for guests
       return newCart;
     });
 
@@ -66,7 +85,7 @@ const StoreContextProvider = (props) => {
 
   const getTotalCartAmount = () => {
     let totalAmount = 0;
-    if (!food_list.length) return totalAmount; // Prevent error when food_list is empty
+    if (!food_list.length) return totalAmount;
     for (const item in cartItems) {
       const itemInfo = food_list.find((product) => product._id === item);
       if (itemInfo) {
@@ -87,7 +106,7 @@ const StoreContextProvider = (props) => {
     } catch (error) {
       toast.error("Error fetching food list");
     } finally {
-      setLoading(false); // Set loading false after fetching
+      setLoading(false);
     }
   };
 
@@ -120,7 +139,7 @@ const StoreContextProvider = (props) => {
     url,
     token,
     setToken,
-    loading, // Provide loading state to components
+    loading,
   };
 
   return <StoreContext.Provider value={contextValue}>{props.children}</StoreContext.Provider>;

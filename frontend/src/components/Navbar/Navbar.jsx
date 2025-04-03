@@ -6,13 +6,12 @@ import { StoreContext } from "../../context/StoreContext";
 import { toast } from "react-toastify";
 
 const Navbar = ({ setShowLogin }) => {
-  const { getTotalCartAmount, token, setToken } = useContext(StoreContext);
+  const { cartItems, token, setToken } = useContext(StoreContext);
   const navigate = useNavigate();
-  const location = useLocation();  // ✅ Get current route
+  const location = useLocation();
   const [menu, setMenu] = useState("");
 
   useEffect(() => {
-    // ✅ Update menu state based on current route
     const path = location.pathname;
     if (path === "/") setMenu("home");
     else if (path === "/about") setMenu("About Us");
@@ -26,6 +25,9 @@ const Navbar = ({ setShowLogin }) => {
     toast.success("Logout Successfully");
     navigate("/");
   };
+
+  // ✅ Calculate total items in cart
+  const totalCartItems = Object.values(cartItems).reduce((sum, qty) => sum + qty, 0);
 
   return (
     <div className="navbar">
@@ -41,10 +43,10 @@ const Navbar = ({ setShowLogin }) => {
 
       <div className="navbar-right">
         <div className="navbar-search-icon">
-          <Link to="/cart">
-            <img src={assets.bag_icon} alt="Cart" />
+          <Link to="/cart" className="cart-icon">
+            <img src={assets.cart_icon} alt="Cart" />
+            {totalCartItems > 0 && <span className="cart-badge">{totalCartItems}</span>}
           </Link>
-          <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
         </div>
 
         {!token ? (
@@ -54,7 +56,7 @@ const Navbar = ({ setShowLogin }) => {
             <img src={assets.profile_icon} alt="Profile" />
             <ul className="nav-profile-dropdown">
               <li onClick={() => navigate("/myorders")}>
-                <img src={assets.bag_icon} alt="Orders" />
+                <img src={assets.orders_icon} alt="Orders" />
                 <p>Orders</p>
               </li>
               <hr />
