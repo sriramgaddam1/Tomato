@@ -49,6 +49,10 @@ const Orders = ({ url }) => {
 
   return (
     <div className="order add">
+      <video autoPlay loop muted className="container-video">
+        <source src="admin.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
       <h3>Order Page</h3>
       <div className="order-list">
         {orders.map((order, index) => (

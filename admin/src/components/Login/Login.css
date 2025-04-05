@@ -9,7 +9,7 @@
     place-self: start center;
     width:max(23vw,330px);
     color: #808080;
-    background-color: white;
+    background-color:none;
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -23,8 +23,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: black;
-    cursor: pointer;
+    color: rgb(249, 237, 237);
 }
 .login-popup-inputs{
     display: flex;
@@ -46,6 +45,15 @@
     font-size: 15px;
     cursor: pointer;
 }
+.container-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1; /* Push video behind other content */
+  }
 
 @media (max-width:650px) {
     .login-popup{
