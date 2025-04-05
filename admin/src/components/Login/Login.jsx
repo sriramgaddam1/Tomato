@@ -43,6 +43,10 @@ const Login = ({ url }) => {
   },[])
   return (
     <div className="login-popup">
+      <video autoPlay loop muted className="container-video">
+        <source src="admin.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
       <form onSubmit={onLogin} className="login-popup-container">
         <div className="login-popup-title">
           <h2>Login</h2>

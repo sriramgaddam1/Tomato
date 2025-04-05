@@ -2,7 +2,7 @@
     width: 70%;
     margin-left: max(5vw,25px);
     margin-top: 50px;
-    color: #6d6d6d;
+    color:tomato;
     font-size: 16px;
 }
 .add form{
@@ -29,9 +29,13 @@
     max-width: 120px;
     border: none;
     padding: 10px;
-    background-color: black;
-    color: white;
+    background-color: rgb(241, 231, 231);
+    color: rgb(0, 0, 0);
     cursor: pointer;
+}
+.add-btn:hover{
+    background-color: tomato;
+    color: white;
 }
 @media (max-width:400px) {
     .add{
