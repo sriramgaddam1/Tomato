@@ -8,7 +8,7 @@ const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [food_list, setFoodList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const url = "http://localhost:4000";
+  const url = "https://tomato-backend-3hdl.onrender.com";
   const [token, setToken] = useState(localStorage.getItem("token") || "");
 
   // ✅ Load cart from localStorage if no token (user not logged in)
