@@ -16,4 +16,4 @@ export const assets ={
     list_icon
 }
 
-export const url = 'https://tomato-backend-3hdl.onrender.com/'
+export const url = 'https://tomato-backend-3hdl.onrender.com'
