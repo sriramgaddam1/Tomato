@@ -76,10 +76,14 @@ const onSubmitHandler = async (event) => {
       category: data.category,
       image: imageUrl,
     };
+const response = await axios.post(`${url}/api/food/add`, foodData, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  },
+  withCredentials: true, // If needed for cookies or sessions
+});
 
-    const response = await axios.post(`${url}/api/food/add`, foodData, {
-      headers: { token },
-    });
 
     if (response.data.success) {
       setData({
