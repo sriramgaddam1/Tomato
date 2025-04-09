@@ -52,42 +52,54 @@ const Add = ({ url }) => {
     setData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const onSubmitHandler = async (event) => {
-    event.preventDefault();
-    if (!imageUrl) {
-      toast.error("Please wait until the image uploads.");
-      return;
-    }
+const onSubmitHandler = async (event) => {
+  event.preventDefault();
 
-    const payload = {
-      ...data,
+  try {
+    // Upload to Cloudinary
+    const formDataImage = new FormData();
+    formDataImage.append("file", image);
+    formDataImage.append("upload_preset", "foodapp_preset"); // Use your preset name
+
+    const cloudinaryRes = await axios.post(
+      "https://api.cloudinary.com/v1_1/ddlujhqlj/image/upload",
+      formDataImage
+    );
+
+    const imageUrl = cloudinaryRes.data.secure_url;
+
+    // Send to backend with Cloudinary image URL
+    const foodData = {
+      name: data.name,
+      description: data.description,
       price: Number(data.price),
-      image: imageUrl, // ✅ Send image URL to backend
+      category: data.category,
+      image: imageUrl,
     };
 
-    try {
-      const response = await axios.post(`${url}/api/food/add`, payload, {
-        headers: { token },
-      });
+    const response = await axios.post(`${url}/api/food/add`, foodData, {
+      headers: { token },
+    });
 
-      if (response.data.success) {
-        setData({
-          name: "",
-          description: "",
-          price: "",
-          category: "Salad",
-        });
-        setImage(false);
-        setImageUrl("");
-        toast.success(response.data.message);
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (err) {
-      toast.error("Something went wrong!");
-      console.error(err);
+    if (response.data.success) {
+      setData({
+        name: "",
+        description: "",
+        price: "",
+        category: "Salad",
+      });
+      setImage(false);
+      toast.success(response.data.message);
+    } else {
+      toast.error(response.data.message);
     }
-  };
+
+  } catch (error) {
+    toast.error("Something went wrong while uploading");
+    console.error(error);
+  }
+};
+
 
   return (
     <div className="add">
