@@ -11,9 +11,6 @@ import orderRouter from "./routes/orderRoute.js";
 const app = express();
 const port = process.env.PORT || 4000;
 
-// middlewares
-import cors from "cors";
-
 // Allow multiple frontends
 const allowedOrigins = [
   "https://tomatoadmin-five.vercel.app",
@@ -31,6 +28,8 @@ app.use(cors({
   credentials: true
 }));
 
+// Middleware to parse JSON
+app.use(express.json());
 
 // DB connection
 connectDB();
@@ -42,10 +41,12 @@ app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 
+// root route
 app.get("/", (req, res) => {
   res.send("API Working");
 });
 
+// start server
 app.listen(port, () => {
   console.log(`Server Started on port: ${port}`);
 });
