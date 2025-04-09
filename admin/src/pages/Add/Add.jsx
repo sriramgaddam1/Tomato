@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./Add.css";
 import { assets } from "../../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useContext } from "react";
 import { StoreContext } from "../../context/StoreContext";
-import { useEffect } from "react";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Add = ({url}) => {
-  const navigate=useNavigate();
-  const {token,admin} = useContext(StoreContext);
+const Add = ({ url }) => {
+  const navigate = useNavigate();
+  const { token, admin } = useContext(StoreContext);
   const [image, setImage] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   const [data, setData] = useState({
     name: "",
     description: "",
@@ -19,41 +18,77 @@ const Add = ({url}) => {
     category: "Salad",
   });
 
+  useEffect(() => {
+    if (!admin && !token) {
+      toast.error("Please Login First");
+      navigate("/");
+    }
+  }, []);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "tomato_preset"); // 🔁 Your unsigned preset name
+
+    try {
+      const res = await fetch("https://api.cloudinary.com/v1_1/ddlujhqlj/image/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      setImageUrl(data.secure_url); // ✅ Cloudinary URL saved
+      toast.success("Image uploaded successfully");
+    } catch (err) {
+      toast.error("Image upload failed");
+      console.error(err);
+    }
+  };
+
   const onChangeHandler = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setData((data) => ({ ...data, [name]: value }));
+    const { name, value } = event.target;
+    setData((prev) => ({ ...prev, [name]: value }));
   };
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("description", data.description);
-    formData.append("price", Number(data.price));
-    formData.append("category", data.category);
-    formData.append("image", image);
+    if (!imageUrl) {
+      toast.error("Please wait until the image uploads.");
+      return;
+    }
 
-    const response = await axios.post(`${url}/api/food/add`, formData,{headers:{token}});
-    if (response.data.success) {
-      setData({
-        name: "",
-        description: "",
-        price: "",
-        category: "Salad",
+    const payload = {
+      ...data,
+      price: Number(data.price),
+      image: imageUrl, // ✅ Send image URL to backend
+    };
+
+    try {
+      const response = await axios.post(`${url}/api/food/add`, payload, {
+        headers: { token },
       });
-      setImage(false);
-      toast.success(response.data.message);
-    } else {
-      toast.error(response.data.message);
+
+      if (response.data.success) {
+        setData({
+          name: "",
+          description: "",
+          price: "",
+          category: "Salad",
+        });
+        setImage(false);
+        setImageUrl("");
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (err) {
+      toast.error("Something went wrong!");
+      console.error(err);
     }
   };
-  useEffect(()=>{
-    if(!admin && !token){
-      toast.error("Please Login First");
-       navigate("/");
-    }
-  },[])
+
   return (
     <div className="add">
       <video autoPlay loop muted className="container-video">
@@ -70,13 +105,16 @@ const Add = ({url}) => {
             />
           </label>
           <input
-            onChange={(e) => setImage(e.target.files[0])}
+            onChange={handleImageUpload}
             type="file"
             id="image"
+            accept="image/*"
             hidden
             required
           />
         </div>
+
+        {/* Other form fields */}
         <div className="add-product-name flex-col">
           <p>Product name</p>
           <input
@@ -124,7 +162,7 @@ const Add = ({url}) => {
             <input
               onChange={onChangeHandler}
               value={data.price}
-              type="Number"
+              type="number"
               name="price"
               placeholder="$20"
               required
