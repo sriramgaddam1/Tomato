@@ -7,17 +7,15 @@ import "dotenv/config";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 
-// app config
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Allow multiple frontends
 const allowedOrigins = [
   "https://tomatoadmin-five.vercel.app",
   "https://tomatofrontend-three.vercel.app"
 ];
 
-app.use(cors({
+const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -25,28 +23,28 @@ app.use(cors({
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true
-}));
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+};
 
-// Middleware to parse JSON
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // Handle preflight
+
 app.use(express.json());
 
-// DB connection
 connectDB();
 
-// api endpoints
 app.use("/api/food", foodRouter);
 app.use("/images", express.static("uploads"));
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 
-// root route
 app.get("/", (req, res) => {
   res.send("API Working");
 });
 
-// start server
 app.listen(port, () => {
   console.log(`Server Started on port: ${port}`);
 });
