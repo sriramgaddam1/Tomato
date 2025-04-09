@@ -3,13 +3,14 @@ import cors from "cors";
 import { connectDB } from "./config/db.js";
 import foodRouter from "./routes/foodRoute.js";
 import userRouter from "./routes/userRoute.js";
-import "dotenv/config";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
+import "dotenv/config";
 
 const app = express();
 const port = process.env.PORT || 4000;
 
+// ✅ CORS setup
 const allowedOrigins = [
   "https://tomatoadmin-five.vercel.app",
   "https://tomatofrontend-three.vercel.app"
@@ -25,26 +26,31 @@ const corsOptions = {
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  allowedHeaders: ["Content-Type", "Authorization"] // ✅ Include 'Authorization'
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // Handle preflight
+app.options("*", cors(corsOptions)); // ✅ Preflight support
 
+// ✅ Middleware to parse JSON
 app.use(express.json());
 
+// ✅ Connect DB
 connectDB();
 
+// ✅ Routes
 app.use("/api/food", foodRouter);
 app.use("/images", express.static("uploads"));
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 
+// ✅ Test route
 app.get("/", (req, res) => {
   res.send("API Working");
 });
 
+// ✅ Start server
 app.listen(port, () => {
   console.log(`Server Started on port: ${port}`);
 });
