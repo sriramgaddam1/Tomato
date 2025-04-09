@@ -56,10 +56,10 @@ const onSubmitHandler = async (event) => {
   event.preventDefault();
 
   try {
-    // Upload to Cloudinary
+    // 1. Upload image to Cloudinary
     const formDataImage = new FormData();
     formDataImage.append("file", image);
-    formDataImage.append("upload_preset", "foodapp_preset"); // Use your preset name
+    formDataImage.append("upload_preset", "tomato_preset");
 
     const cloudinaryRes = await axios.post(
       "https://api.cloudinary.com/v1_1/ddlujhqlj/image/upload",
@@ -68,7 +68,7 @@ const onSubmitHandler = async (event) => {
 
     const imageUrl = cloudinaryRes.data.secure_url;
 
-    // Send to backend with Cloudinary image URL
+    // 2. Send product data to backend with Cloudinary image URL
     const foodData = {
       name: data.name,
       description: data.description,
@@ -96,9 +96,10 @@ const onSubmitHandler = async (event) => {
 
   } catch (error) {
     toast.error("Something went wrong while uploading");
-    console.error(error);
+    console.error("Upload error:", error.response?.data || error.message);
   }
 };
+
 
 
   return (
