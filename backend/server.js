@@ -12,12 +12,15 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 // middlewares
-app.use(express.json());
 app.use(cors({
-  origin: "https://tomatoadmin-five.vercel.app",
+  origin: [
+    "https://tomatoadmin-five.vercel.app",
+    "https://tomatofrontend-three.vercel.app"
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
+
 
 // DB connection
 connectDB();
