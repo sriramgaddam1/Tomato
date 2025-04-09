@@ -12,12 +12,22 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 // middlewares
+import cors from "cors";
+
+// Allow multiple frontends
+const allowedOrigins = [
+  "https://tomatoadmin-five.vercel.app",
+  "https://tomatofrontend-three.vercel.app"
+];
+
 app.use(cors({
-  origin: [
-    "https://tomatoadmin-five.vercel.app",
-    "https://tomatofrontend-three.vercel.app"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
 
