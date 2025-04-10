@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 const Add = ({ url }) => {
   const navigate = useNavigate();
   const { token, admin } = useContext(StoreContext);
+
   const [image, setImage] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [data, setData] = useState({
@@ -31,7 +32,7 @@ const Add = ({ url }) => {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "tomato_preset"); // 🔁 Your unsigned preset name
+    formData.append("upload_preset", "tomato_preset");
 
     try {
       const res = await fetch("https://api.cloudinary.com/v1_1/ddlujhqlj/image/upload", {
@@ -39,7 +40,7 @@ const Add = ({ url }) => {
         body: formData,
       });
       const data = await res.json();
-      setImageUrl(data.secure_url); // ✅ Cloudinary URL saved
+      setImageUrl(data.secure_url);
       toast.success("Image uploaded successfully");
     } catch (err) {
       toast.error("Image upload failed");
@@ -52,59 +53,63 @@ const Add = ({ url }) => {
     setData((prev) => ({ ...prev, [name]: value }));
   };
 
-const onSubmitHandler = async (event) => {
-  event.preventDefault();
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
 
-  try {
-    // 1. Upload image to Cloudinary
-    const formDataImage = new FormData();
-    formDataImage.append("file", image);
-    formDataImage.append("upload_preset", "tomato_preset");
-
-    const cloudinaryRes = await axios.post(
-      "https://api.cloudinary.com/v1_1/ddlujhqlj/image/upload",
-      formDataImage
-    );
-
-    const imageUrl = cloudinaryRes.data.secure_url;
-
-    // 2. Send product data to backend with Cloudinary image URL
-    const foodData = {
-      name: data.name,
-      description: data.description,
-      price: Number(data.price),
-      category: data.category,
-      image: imageUrl,
-    };
-const response = await axios.post(`${url}/api/food/add`, foodData, {
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  },
-  withCredentials: true, // If needed for cookies or sessions
-});
-
-
-    if (response.data.success) {
-      setData({
-        name: "",
-        description: "",
-        price: "",
-        category: "Salad",
-      });
-      setImage(false);
-      toast.success(response.data.message);
-    } else {
-      toast.error(response.data.message);
+    // ✅ Manual check for required image
+    if (!image) {
+      toast.error("Please upload an image");
+      return;
     }
 
-  } catch (error) {
-    toast.error("Something went wrong while uploading");
-    console.error("Upload error:", error.response?.data || error.message);
-  }
-};
+    try {
+      // 1. Upload image to Cloudinary
+      const formDataImage = new FormData();
+      formDataImage.append("file", image);
+      formDataImage.append("upload_preset", "tomato_preset");
 
+      const cloudinaryRes = await axios.post(
+        "https://api.cloudinary.com/v1_1/ddlujhqlj/image/upload",
+        formDataImage
+      );
 
+      const imageUrl = cloudinaryRes.data.secure_url;
+
+      // 2. Send food data to backend
+      const foodData = {
+        name: data.name,
+        description: data.description,
+        price: Number(data.price),
+        category: data.category,
+        image: imageUrl,
+      };
+
+      const response = await axios.post(`${url}/api/food/add`, foodData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
+
+      if (response.data.success) {
+        setData({
+          name: "",
+          description: "",
+          price: "",
+          category: "Salad",
+        });
+        setImage(false);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+
+    } catch (error) {
+      toast.error("Something went wrong while uploading");
+      console.error("Upload error:", error.response?.data || error.message);
+    }
+  };
 
   return (
     <div className="add">
@@ -112,6 +117,7 @@ const response = await axios.post(`${url}/api/food/add`, foodData, {
         <source src="admin.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
+
       <form onSubmit={onSubmitHandler} className="flex-col">
         <div className="add-img-upload flex-col">
           <p>Upload image</p>
@@ -125,13 +131,12 @@ const response = await axios.post(`${url}/api/food/add`, foodData, {
             onChange={handleImageUpload}
             type="file"
             id="image"
+            name="image"
             accept="image/*"
-            hidden
-            required
+            hidden // ✅ Keep hidden
           />
         </div>
 
-        {/* Other form fields */}
         <div className="add-product-name flex-col">
           <p>Product name</p>
           <input
@@ -143,6 +148,7 @@ const response = await axios.post(`${url}/api/food/add`, foodData, {
             required
           />
         </div>
+
         <div className="add-product-description flex-col">
           <p>Product description</p>
           <textarea
@@ -154,6 +160,7 @@ const response = await axios.post(`${url}/api/food/add`, foodData, {
             required
           ></textarea>
         </div>
+
         <div className="add-category-price">
           <div className="add-category flex-col">
             <p>Product category</p>
@@ -174,6 +181,7 @@ const response = await axios.post(`${url}/api/food/add`, foodData, {
               <option value="Non Veg">Non Veg</option>
             </select>
           </div>
+
           <div className="add-price flex-col">
             <p>Product price</p>
             <input
@@ -186,6 +194,7 @@ const response = await axios.post(`${url}/api/food/add`, foodData, {
             />
           </div>
         </div>
+
         <button type="submit" className="add-btn">
           ADD
         </button>
