@@ -26,8 +26,9 @@ const corsOptions = {
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"] // ✅ Include 'Authorization'
+  allowedHeaders: ["Content-Type", "Authorization", "token"] // ✅ Added 'token'
 };
+
 
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions)); // ✅ Preflight support
