@@ -39,4 +39,5 @@ coverage/
 .env.test.local
 .env.production.local
 backend/vertex-key.json
-"backend/vertex-key.json" 
+
+
