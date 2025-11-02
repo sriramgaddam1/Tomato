@@ -29,7 +29,7 @@ const FoodDisplay = ({ category }) => {
         ) : (
           <div className="no-items-container">
             <img className="no-item-img" src="noitems.avif" alt="No items found" />
-            <p className="no-items-found">⚠️Oops! This food item is currently unavailable</p>
+            <p className="no-items-found">⚠️Oops! This food items are currently unavailable</p>
           </div>
         )}
 

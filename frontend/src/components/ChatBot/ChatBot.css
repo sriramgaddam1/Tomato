@@ -1,0 +1,70 @@
+/* Chat window styles */
+.chat-window {
+    width: 100%;
+    max-width: 400px;
+    height: 500px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    overflow-y: scroll;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Message styling */
+  .chat-window p {
+    padding: 5px 10px;
+    margin: 5px 0;
+    border-radius: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  
+  /* User message styling */
+  .chat-window p.user {
+    background-color: #007bff;
+    color: white;
+    text-align: left;
+    align-self: flex-end;
+    max-width: 80%;
+  }
+  
+  /* Bot message styling */
+  .chat-window p.bot {
+    background-color: #28a745;
+    color: white;
+    text-align: left;
+    align-self: flex-start;
+    max-width: 80%;
+  }
+  
+  /* Input field */
+  input {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  
+  /* Send button */
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  

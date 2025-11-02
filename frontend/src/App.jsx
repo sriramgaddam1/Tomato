@@ -13,7 +13,7 @@ import MyOrders from "./pages/MyOrders/MyOrders";
 import About from "./components/About/About";
 import PrivacyPolicy from "./components/Privacy/Privacy";
 import HelpPage from "./components/Help/Help";
-
+import ChatBot from "./components/ChatBot/ChatBot";
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
   return (
@@ -31,7 +31,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/privacy"element={<PrivacyPolicy />} />
           <Route path="/help" element={<HelpPage/>}/>
-
+          <Route path="/chatbot" element={<ChatBot />} />
         </Routes>
       </div>
       <Footer />

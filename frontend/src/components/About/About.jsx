@@ -36,6 +36,7 @@ const About = () => {
         </div>
       </section>
 
+
       {/* Call to Action */}
       {/* <section className="cta-section">
         <h2>Hungry? Order Now!</h2>

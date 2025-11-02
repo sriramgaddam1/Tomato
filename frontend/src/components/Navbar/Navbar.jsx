@@ -39,6 +39,7 @@ const Navbar = ({ setShowLogin }) => {
         <Link to="/" className={menu === "home" ? "active" : ""}>Home</Link>
         <Link to="/about" className={menu === "About Us" ? "active" : ""}>About Us</Link>
         <Link to="/help" className={menu === "help" ? "active" : ""}>Help</Link>
+        <Link to ="/chatbot" className={menu === "chatbot" ? "active" : ""}>Chatbot</Link>
       </ul>
 
       <div className="navbar-right">

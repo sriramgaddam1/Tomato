@@ -14,6 +14,7 @@
   grid-template-columns: 2fr 1fr 1fr;
   gap: 80px;
 }
+
 .footer-content-left,
 .footer-content-center,
 .footer-content-right {
